@@ -47,7 +47,7 @@ public class Individuo implements Comparable<Individuo>{
 		return aptidao;
 	}
 
-	protected void setAptidao() {
+	public void setAptidao() {
 		Map<String, Integer> binarios = new HashMap<String, Integer>();
 		for(int i=0; i<Individuo.TAM_INDIVIDUO; i++) {
 			binarios.put("b" + (i+1), Character.getNumericValue(this.getCromossomo().charAt(i)));
