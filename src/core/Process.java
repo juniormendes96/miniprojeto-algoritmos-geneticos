@@ -15,7 +15,7 @@ public class Process {
 	public static void iniciar() {
 		int contGeracao = 0;
 		criarPopulacao();
-		while(contGeracao < 3000) {
+		while(contGeracao < 300) {
 			contGeracao++;
 			for(Individuo i : populacao) {
 				i.setProbSelecao(populacao);
@@ -64,16 +64,16 @@ public class Process {
 			// Elitismo
 			populacao.add(A1CrossA2.getAptidao() > A1.getAptidao() ? A1CrossA2 : A1);
 			populacao.add(A2CrossA1.getAptidao() > A2.getAptidao() ? A2CrossA1 : A2);
-		}
-		for(int i=0; i<TAM_POPULACAO/2; i+=2) {
-			pontoDeCorte = gerarPontoDeCorte();
-			Individuo A1 = populacaoClone.get(i);
-			Individuo A2 = populacaoClone.get(i+1);
-			String subA1 = A1.getCromossomo().substring(pontoDeCorte, Individuo.TAM_INDIVIDUO);
-			String subA2 = A2.getCromossomo().substring(pontoDeCorte, Individuo.TAM_INDIVIDUO);
 			
-			Individuo A1CrossA2 = new Individuo(A1.getCromossomo().substring(0, pontoDeCorte) + subA2);
-			Individuo A2CrossA1 = new Individuo(A2.getCromossomo().substring(0, pontoDeCorte) + subA1);
+			
+			pontoDeCorte = gerarPontoDeCorte();
+			A1 = populacaoClone.get(i);
+			A2 = populacaoClone.get(i+1);
+			subA1 = A1.getCromossomo().substring(pontoDeCorte, Individuo.TAM_INDIVIDUO);
+			subA2 = A2.getCromossomo().substring(pontoDeCorte, Individuo.TAM_INDIVIDUO);
+			
+			A1CrossA2 = new Individuo(A1.getCromossomo().substring(0, pontoDeCorte) + subA2);
+			A2CrossA1 = new Individuo(A2.getCromossomo().substring(0, pontoDeCorte) + subA1);
 			
 			A2CrossA1.mutacao(2);
 			A2CrossA1.setAptidao();
