@@ -13,12 +13,24 @@ public class Process {
 	public static List<Individuo> populacao = new ArrayList<>();
 	
 	public static void iniciar() {
+		int contGeracao = 0;
 		criarPopulacao();
-		for(Individuo i : populacao) {
-			i.setProbSelecao(populacao);
+		while(contGeracao < 100) {
+			contGeracao++;
+			for(Individuo i : populacao) {
+				i.setProbSelecao(populacao);
+			}
+			System.out.println("\nGeração: " + contGeracao);
+			listar();
+			selecionarMaisAptos();
+			crossover();
 		}
-		selecionarMaisAptos();
-		crossover();
+	}
+	
+	public static void listar() {
+		for(Individuo i : populacao) {
+			System.out.println(String.format("Cromossomo: %s - Aptidão: %d - Prob. seleção: %s", i.getCromossomo(), i.getAptidao(), String.format("%.2f", i.getProbSelecao())));
+		}
 	}
 	
 	public static void criarPopulacao() {
@@ -43,8 +55,14 @@ public class Process {
 			String subA1 = A1.substring(pontoDeCorte, Individuo.TAM_INDIVIDUO);
 			String subA2 = A2.substring(pontoDeCorte, Individuo.TAM_INDIVIDUO);
 			
-			populacao.add(new Individuo(populacaoClone.get(i).getCromossomo().substring(0, pontoDeCorte) + subA2));
-			populacao.add(new Individuo(populacaoClone.get(i+1).getCromossomo().substring(0, pontoDeCorte) + subA1));
+			Individuo i1 = new Individuo(populacaoClone.get(i).getCromossomo().substring(0, pontoDeCorte) + subA2);
+			Individuo i2 = new Individuo(populacaoClone.get(i+1).getCromossomo().substring(0, pontoDeCorte) + subA1);
+			
+			i1.mutacao(1);
+			i2.mutacao(2);
+			
+			populacao.add(i1);
+			populacao.add(i2);
 		}
 		for(int i=0; i<TAM_POPULACAO/2; i+=2) {
 			pontoDeCorte = gerarPontoDeCorte();
@@ -53,8 +71,14 @@ public class Process {
 			String subA2 = A2.substring(pontoDeCorte, Individuo.TAM_INDIVIDUO);
 			String subA1 = A1.substring(pontoDeCorte, Individuo.TAM_INDIVIDUO);
 			
-			populacao.add(new Individuo(populacaoClone.get(i+1).getCromossomo().substring(0, pontoDeCorte) + subA2));
-			populacao.add(new Individuo(populacaoClone.get(i).getCromossomo().substring(0, pontoDeCorte) + subA1));
+			Individuo i1 = new Individuo(populacaoClone.get(i+1).getCromossomo().substring(0, pontoDeCorte) + subA2);
+			Individuo i2 = new Individuo(populacaoClone.get(i).getCromossomo().substring(0, pontoDeCorte) + subA1);
+			
+			i1.mutacao(2);
+			i2.mutacao(1);
+			
+			populacao.add(i1);
+			populacao.add(i2);
 		}
 	}
 	

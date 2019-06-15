@@ -66,6 +66,19 @@ public class Individuo implements Comparable<Individuo>{
 				+ (binarios.get("b25") * binarios.get("b19")) + (binarios.get("b7") * binarios.get("b8")) 
 				+ (binarios.get("b9") * binarios.get("b18")) + (binarios.get("b1") * binarios.get("b33"));
 	}
+	
+	public void mutacao(int qtBits) {
+		Random r = new Random();
+		int maximo = Individuo.TAM_INDIVIDUO - 1;
+		int minimo = 0;
+		int range = maximo - minimo + 1;
+		StringBuilder sb = new StringBuilder(this.getCromossomo());
+		for(int i=0; i<qtBits; i++) {
+			int index =  r.nextInt(range) + minimo;
+			sb.setCharAt(index, this.getCromossomo().charAt(index) == '0' ? '1' : '0');
+		}
+		this.setCromossomo(sb.toString());
+	}
 
 	@Override
 	public int compareTo(Individuo o) {
