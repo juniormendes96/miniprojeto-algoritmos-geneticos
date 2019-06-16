@@ -15,7 +15,7 @@ public class Process {
 	public static void iniciar() {
 		int contGeracao = 0;
 		criarPopulacao();
-		while(contGeracao < 300) {
+		while(contGeracao < 2000) { // critério de parada - número de gerações
 			contGeracao++;
 			for(Individuo i : populacao) {
 				i.setProbSelecao(populacao);
@@ -25,6 +25,12 @@ public class Process {
 			selecionarMaisAptos();
 			crossover();
 		}
+		printResultado();
+	}
+	
+	public static void printResultado() {
+		System.out.println("\n---------- RESULTADO ----------");
+		System.out.println(String.format("Cromossomo: %s - Aptidão (fitness): %d", getMaisApto().getCromossomo(), getMaisApto().getAptidao()));
 	}
 
 	public static void listar() {
@@ -44,7 +50,28 @@ public class Process {
 		populacao.subList(0, TAM_POPULACAO/2).clear(); // remove os menos prováveis
 	}
 	
+	public static Individuo getMenosApto() {
+		Individuo menosApto = populacao.get(0);
+		for(Individuo i : populacao) {
+			if(i.getAptidao() < menosApto.getAptidao()) {
+				menosApto = i;
+			}
+		}
+		return menosApto;
+	}
+	
+	public static Individuo getMaisApto() {
+		Individuo maisApto = populacao.get(0);
+		for(Individuo i : populacao) {
+			if(i.getAptidao() > maisApto.getAptidao()) {
+				maisApto = i;
+			}
+		}
+		return maisApto;
+	}
+	
 	public static void crossover() {
+		Individuo maisApto = populacao.get(populacao.size()-1);
 		List<Individuo> populacaoClone = new ArrayList<>(populacao);
 		populacao.clear();
 		int pontoDeCorte;
@@ -61,9 +88,8 @@ public class Process {
 			A2CrossA1.mutacao(1);
 			A2CrossA1.setAptidao();
 			
-			// Elitismo
-			populacao.add(A1CrossA2.getAptidao() > A1.getAptidao() ? A1CrossA2 : A1);
-			populacao.add(A2CrossA1.getAptidao() > A2.getAptidao() ? A2CrossA1 : A2);
+			populacao.add(A1CrossA2);
+			populacao.add(A2CrossA1);
 			
 			
 			pontoDeCorte = gerarPontoDeCorte();
@@ -78,9 +104,15 @@ public class Process {
 			A2CrossA1.mutacao(2);
 			A2CrossA1.setAptidao();
 			
-			// Elitismo
-			populacao.add(A1CrossA2.getAptidao() > A1.getAptidao() ? A1CrossA2 : A1);
-			populacao.add(A2CrossA1.getAptidao() > A2.getAptidao() ? A2CrossA1 : A2);
+			populacao.add(A1CrossA2);
+			populacao.add(A2CrossA1);
+			
+			// elitismo - o mais apto da população anterior vai para a próxima população
+			Individuo menosApto = getMenosApto();
+			if(menosApto.getAptidao() < maisApto.getAptidao()) {
+				populacao.remove(menosApto);
+				populacao.add(maisApto);
+			}
 		}
 	}
 	
