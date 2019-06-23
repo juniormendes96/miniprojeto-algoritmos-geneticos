@@ -30,7 +30,7 @@ public class Process {
 	
 	public static void printResultado() {
 		System.out.println("\n---------- RESULTADO ----------");
-		System.out.println(String.format("Cromossomo: %s - Aptidão (fitness): %d", getMaisApto().getCromossomo(), getMaisApto().getAptidao()));
+		System.out.println(String.format("Cromossomo mais apto: %s - Aptidão (fitness): %d", getMaisApto().getCromossomo(), getMaisApto().getAptidao()));
 	}
 
 	public static void listar() {
@@ -71,7 +71,7 @@ public class Process {
 	}
 	
 	public static void crossover() {
-		Individuo maisApto = populacao.get(populacao.size()-1);
+		Individuo maisApto = getMaisApto();
 		List<Individuo> populacaoClone = new ArrayList<>(populacao);
 		populacao.clear();
 		int pontoDeCorte;
